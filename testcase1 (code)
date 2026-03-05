@@ -1,0 +1,53 @@
+import numpy as np
+
+# Training dataset
+data = [
+    ['High', 'Yes', 'Yes', 'Yes'],
+    ['High', 'Yes', 'No', 'Yes'],
+    ['Normal', 'Yes', 'Yes', 'No'],
+    ['High', 'No', 'Yes', 'Yes']
+]
+
+# Attributes count
+num_attr = len(data[0]) - 1
+
+# Initialize S and G
+S = ['0'] * num_attr
+G = [['?'] * num_attr]
+
+print("Initial Specific Hypothesis S:", S)
+print("Initial General Hypothesis G:", G)
+print()
+
+for i, example in enumerate(data):
+    attributes = example[:-1]
+    label = example[-1]
+
+    if label == 'Yes':  # Positive example
+        for j in range(num_attr):
+            if S[j] == '0':
+                S[j] = attributes[j]
+            elif S[j] != attributes[j]:
+                S[j] = '?'
+
+        # Remove inconsistent hypotheses from G
+        G = [g for g in G if all(g[j] == '?' or g[j] == S[j] for j in range(num_attr))]
+
+    else:  # Negative example
+        new_G = []
+        for g in G:
+            for j in range(num_attr):
+                if g[j] == '?':
+                    if attributes[j] != S[j]:
+                        new_h = g.copy()
+                        new_h[j] = S[j]
+                        new_G.append(new_h)
+        G = new_G
+
+    print(f"Step {i+1}")
+    print("S:", S)
+    print("G:", G)
+    print()
+
+print("Final Specific Hypothesis S:", S)
+print("Final General Hypothesis G:", G)
