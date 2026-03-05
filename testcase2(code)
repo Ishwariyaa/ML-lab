@@ -1,0 +1,22 @@
+import pandas as pd, math
+
+data = pd.DataFrame({
+'Fever':['High','High','Normal','Low'],
+'Cough':['Yes','Yes','Yes','No'],
+'Fatigue':['Yes','No','Yes','No'],
+'Age':['Old','Young','Old','Young'],
+'Disease':['Yes','Yes','Yes','No']
+})
+
+def entropy(c):
+    p = c.value_counts(normalize=True)
+    return -sum(p* p.apply(lambda x: math.log2(x)))
+
+def gain(a):
+    e = entropy(data['Disease'])
+    vals = data[a].unique()
+    w = sum((len(data[data[a]==v])/len(data))*entropy(data[data[a]==v]['Disease']) for v in vals)
+    return e-w
+
+for a in ['Fever','Cough','Fatigue','Age']:
+    print(a,round(gain(a),3))
