@@ -1,0 +1,16 @@
+import pandas as pd
+
+df = pd.DataFrame({
+'Free':[1,1,0,0,0,1],
+'Win':[1,0,1,0,0,0],
+'Offer':[1,1,0,1,0,0],
+'Spam':[1,1,1,0,0,0]
+})
+
+s = df[df.Spam==1]
+n = df[df.Spam==0]
+
+p1 = (3/6)*(s.Free.mean())*(s.Win.mean())*(1-s.Offer.mean())
+p2 = (3/6)*(n.Free.mean())*(n.Win.mean())*(1-n.Offer.mean())
+
+print("Prediction:", "Spam" if p1>p2 else "Not Spam")
