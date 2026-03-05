@@ -1,0 +1,23 @@
+# Prior probabilities
+P_pass = 4/6
+P_fail = 2/6
+
+# Conditional probabilities
+P_study_given_pass = 3/4
+P_att_given_pass = 3/4
+P_study_given_fail = 0
+P_att_given_fail = 0
+
+# Given data
+study = "High"
+attendance = "High"
+
+# Posterior (unnormalized)
+posterior_pass = P_pass * P_study_given_pass * P_att_given_pass
+posterior_fail = P_fail * P_study_given_fail * P_att_given_fail
+
+# Prediction
+result = "Pass" if posterior_pass > posterior_fail else "Fail"
+
+# Output
+print(f"StudyHour: {study}, Attendance: {attendance}, Result: {result}")
