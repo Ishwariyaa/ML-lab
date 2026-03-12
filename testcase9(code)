@@ -1,0 +1,36 @@
+import numpy as np
+
+# Training data
+# House size (sq.ft)
+X = np.array([800, 1000, 1200, 1500, 1800, 2000])
+
+# Price (₹ Lakhs)
+Y = np.array([20, 25, 30, 38, 45, 50])
+
+# Add bias term (1) to X
+X_mat = np.vstack((np.ones(len(X)), X)).T
+Y_mat = Y.reshape(-1,1)
+
+# Test point
+x_query = 1400
+x_query_mat = np.array([1, x_query])
+
+# Bandwidth parameter
+tau = 300
+
+# Compute weight matrix
+m = len(X)
+W = np.zeros((m, m))
+
+for i in range(m):
+    diff = X[i] - x_query
+    W[i, i] = np.exp(-(diff**2) / (2 * tau**2))
+
+# Locally weighted regression formula
+theta = np.linalg.inv(X_mat.T @ W @ X_mat) @ (X_mat.T @ W @ Y_mat)
+
+# Prediction
+predicted_price = x_query_mat @ theta
+
+print("Predicted price for house size 1400 sq.ft:")
+print(round(predicted_price[0], 2), "Lakhs")  
